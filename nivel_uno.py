@@ -32,6 +32,13 @@ class Nivel_uno(Nivel):
         trampolin = Item("item/trampolin.png",(70,70),(1055,739),"impulso",-30)
         llave = Item("item/llave.png",(20,20),(1500,350),"llave")        
         puerta = Item("puerta/puerta.png",(60,120),(460,290),"puerta")
+        moneda = Item("monedas/monedaNo1_00.png",(30,30),(1340,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        moneda_2 = Item("monedas/monedaNo1_00.png",(30,30),(1380,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        moneda_3 = Item("monedas/monedaNo1_00.png",(30,30),(1420,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        moneda_4 = Item("monedas/monedaNo1_00.png",(30,30),(665,650),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        moneda_5 = Item("monedas/monedaNo1_00.png",(30,30),(680,610),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        moneda_6 = Item("monedas/monedaNo1_00.png",(30,30),(695,650),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
+        
         
         #PLATAFORMAS
         piso_principal = pygame.Rect(0,650,435,60)
@@ -49,7 +56,7 @@ class Nivel_uno(Nivel):
 
 
         lista_enemigos = [enemigo]
-        lista_items = [manzana,trampolin,llave,puerta]
+        lista_items = [manzana,trampolin,llave,puerta,moneda,moneda_2,moneda_3,moneda_4,moneda_5,moneda_6]
         lista_trampas = [cierra]
         
         super().__init__(pantalla, personaje, lista_plataformas, fondo, lista_enemigos, lista_items, lista_trampas)

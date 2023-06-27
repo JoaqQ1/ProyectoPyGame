@@ -25,10 +25,19 @@ class Nivel_dos(Nivel):
         enemigo = Enemigo("pgn/ENEMIGO/quieto/0.png",medidas_enemigo,punto_de_inicio_enemigo_lvl_2,diccionario_acciones_enemigo,5)
         enemigo_2 = Enemigo("pgn/ENEMIGO/quieto/0.png",medidas_enemigo,(1490,480),diccionario_acciones_enemigo,5)
         fantasma = Enemigo_fantasma("pgn/ENEMIGO3/camina/19.png",(60,60),(800,830),diccionario_acciones_fantasma,5,(0,885))
+        moneda = Item("monedas/monedaNo1_00.png",(30,30),(240, 478),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_2 = Item("monedas/monedaNo1_00.png",(30,30),(270,478),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_3 = Item("monedas/monedaNo1_00.png",(30,30),(300,478),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_4 = Item("monedas/monedaNo1_00.png",(30,30),(1037, 605),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_5 = Item("monedas/monedaNo1_00.png",(30,30),(1097,605),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_6 = Item("monedas/monedaNo1_00.png",(30,30),(1157,605),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_7 = Item("monedas/monedaNo1_00.png",(30,30),(1037,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_8 = Item("monedas/monedaNo1_00.png",(30,30),(1097,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        moneda_9 = Item("monedas/monedaNo1_00.png",(30,30),(1157,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
+        calavera = Item("item_peligrosos/36.png",(30,30),(800,700),"peligroso",lista_animaciones=calavera_moviendose)
         
         #TRAMPAS
         cierra = Trampa("trampa/cierra.png",(40,40),(140,533),(130,500))
-        
         #ITEMS
         manzana = Item("item/Apple.png",(50,50),(441, 523),"vida")
         trampolin = Item("item/trampolin.png",(70,70),(890,860),"impulso",-30)
@@ -50,10 +59,13 @@ class Nivel_dos(Nivel):
         plataformas = [plataforma_arriba_lvl_2,piso_abajo_lvl_2,plataforma_de_inicio_lvl_2,plataforma_baja_lvl_2,plataforma_arriba_de_la_baja_lvl_2,techo_enfrente_lvl_2,pared_del_techo_lvl_2]
 
         lista_plataformas = rectangulos_convertidos(plataformas)
-
-
         lista_enemigos = [fantasma,enemigo,enemigo_2]
-        lista_items = [manzana,trampolin,llave,puerta,trampolin_2,trampolin_3]
+        lista_items = [manzana,trampolin,llave,puerta,trampolin_2,trampolin_3,moneda,moneda_2,moneda_3,moneda_4,moneda_5,moneda_6,moneda_7,moneda_8,moneda_9,calavera]
         lista_trampas = [cierra]
+
+
+        
+
+        
         
         super().__init__(pantalla, personaje, lista_plataformas, fondo, lista_enemigos, lista_items, lista_trampas)

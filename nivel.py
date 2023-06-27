@@ -19,12 +19,19 @@ class Nivel:
         win = pygame.image.load("next_lvl/win.png")
         win = pygame.transform.scale(win,(w,h))
         self.win = win
-
         self.game_over = game_over
+
+        #####################
+        self.fuente = pygame.font.SysFont("Arial",35)
+        self.total_game_time = 60
+        self.tiempo_de_juego = 0
+        self.tiempo_en_pantalla = 0
 
         #####################
 
     def update(self,lista_eventos):
+        tiempo = pygame.time.get_ticks()
+        
         for event in lista_eventos:
             if event.type == pygame.KEYDOWN:         
                 if event.key == pygame.K_TAB:            
@@ -32,12 +39,23 @@ class Nivel:
             elif event.type == pygame.QUIT: 
                 sys.exit()
         if self.jugador.vida > 0 and self.jugador.entro == False:
+            #Tiempo en pantalla en segundos
+            self.tiempo_de_juego = self.total_game_time - int(tiempo / 1000)
+            self.tiempo_en_pantalla = self.fuente.render(f"{self.tiempo_de_juego}",False,"Red")
             self.actualizar_pantalla()
             self.dibujear_rectangulos()
         elif self.jugador.entro:
             self._slave.blit(self.win,(0,0))
+
+            texto = self.fuente.render(f"""Felizidades completo el nivel.
+                SCORE: {self.jugador.score}
+                VIDA: {self.jugador.vida}
+                TIEMPO:{self.tiempo_de_juego}""",False,"Red")
+            
+            self._slave.blit(texto,(266, 498))
         else:
             self._slave.blit(self.game_over,(0,0))
+        self._slave.blit(self.tiempo_en_pantalla,(0, 0))
 
 
 
