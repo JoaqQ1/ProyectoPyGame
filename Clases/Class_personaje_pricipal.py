@@ -14,7 +14,8 @@ class Personaje_principal(Personaje):
         self.golpeado = False
         self.llave = False
         self.score = 0
-        self.vida = 3        
+        self.vida = 3
+        self.entro = False        
 
 
     def update(self,pantalla:pygame.Surface,plataformas,que_hace,ancho_pantalla,lista_enemigo,lista_trampas):
@@ -38,7 +39,7 @@ class Personaje_principal(Personaje):
                     self.que_hace = "corriendo"
                     self.animar_personaje(pantalla)
                 
-                if self.detectar_colision_con_pared(plataformas) != -1:                      
+                if self.detectar_colision_con_pared(plataformas) != -1:                                        
                     self.mover_personaje(self.velocidad * -1,ancho_pantalla[0])
 
                 self.direccion = "izquierda"
@@ -67,9 +68,10 @@ class Personaje_principal(Personaje):
                 self.animar_personaje(pantalla)
                 ultima_animacion = len(self.animaciones[self.direccion][self.que_hace])
                 if ultima_animacion == self.frame_actual:
-                    self.devolver_pos_inicial()
-                    self.golpeado = False
-                    self.vida -= 1
+                    if self.vida > 0:  
+                        self.devolver_pos_inicial()
+                        self.golpeado = False
+                        self.vida -= 1
                     
             
         self.shoot(pantalla,30)

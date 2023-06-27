@@ -37,7 +37,7 @@ class Personaje(Objeto_Juego):
 
     def mover_personaje(self,velocidad,ancho_pantalla):
         for lados in self.lados:
-            if (self.lados[lados].x == 0 and velocidad < 0) or (self.lados[lados].x == ancho_pantalla - 100 and velocidad > 0):
+            if (self.lados[lados].x < 0 and velocidad < 0) or (self.lados[lados].x == ancho_pantalla - 100 and velocidad > 0):
                 velocidad = 0
 
             self.lados[lados].x += velocidad
@@ -54,13 +54,15 @@ class Personaje(Objeto_Juego):
         self.frame_actual += 1
     
     def aplicar_gravedad(self,pantalla:pygame.Surface,plataformas):
+       
         if self.saltando:
             self.animar_personaje(pantalla)
-            for lado in self.lados:
-                self.lados[lado].y += self.desplazamiento_y
+
+            for lado in self.lados:                
+                    self.lados[lado].y += self.desplazamiento_y
 
             if self.desplazamiento_y + self.gravedad <= self.limite_velocidad_caida:
-                self.desplazamiento_y += self.gravedad
+                    self.desplazamiento_y += self.gravedad
         for lado in plataformas:
             if self.lados["bottom"].colliderect(lado["top"]):               
                 self.desplazamiento_y = 0

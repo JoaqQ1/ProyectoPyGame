@@ -29,7 +29,7 @@ class Nivel_uno(Nivel):
         
         #ITEMS
         manzana = Item("item/Apple.png",(50,50),(1240,350),"vida")
-        trampolin = Item("item/trampolin.png",(70,70),(1055,739),"impulso")
+        trampolin = Item("item/trampolin.png",(70,70),(1055,739),"impulso",-30)
         llave = Item("item/llave.png",(20,20),(1500,350),"llave")        
         puerta = Item("puerta/puerta.png",(60,120),(460,290),"puerta")
         

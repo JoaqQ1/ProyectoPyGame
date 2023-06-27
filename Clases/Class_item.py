@@ -1,13 +1,15 @@
 import pygame
 from Clases.Class_objeto_juego import Objeto_Juego
 
+
 class Item(Objeto_Juego):
-    def __init__(self, path_img, tamaño_rect, pos_inicial,caracteristica):
+    def __init__(self, path_img, tamaño_rect, pos_inicial,caracteristica,impulso=0):
         super().__init__(path_img, tamaño_rect, pos_inicial)
         self.caracteristica = caracteristica
         self.recogido = False
         self.sonido_item = pygame.mixer.Sound("sonidos/sCoinGet.ogg")
-        self.abierta = False
+        self.impulso = impulso
+        
     
     
     def update(self,personaje,pantalla):
@@ -22,7 +24,7 @@ class Item(Objeto_Juego):
             case "impulso":
                 if self.lados["top"].colliderect(personaje.lados["bottom"]):
                    personaje.saltando = True
-                   personaje.desplazamiento_y = -30
+                   personaje.desplazamiento_y = self.impulso
             case "llave":
                 if self.lados["main"].colliderect(personaje.lados["main"]):
                     self.sonido_item.play()
@@ -32,7 +34,7 @@ class Item(Objeto_Juego):
                 if personaje.llave:
                     if self.lados["main"].colliderect(personaje.lados["main"]):
                         self.sonido_item.play()
-                        self.abierta = True
+                        personaje.entro = True
 
                 
     

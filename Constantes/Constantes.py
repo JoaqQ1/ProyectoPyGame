@@ -87,7 +87,7 @@ LARGO_PLYER = 100
 ANCHO_PLYER = 150
 #Posicion incial del personaje
 pos_inicial_lvl_1 = (150,500)
-pos_inicial_lvl_2 = (319,160)
+pos_inicial_lvl_2 = (200,750)
 
 
 

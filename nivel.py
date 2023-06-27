@@ -1,7 +1,7 @@
 import pygame,sys
 from modo import *
 class Nivel:
-    def __init__(self,pantalla,personaje_principal,lista_plataformas,imagen_fondo,lista_enemigos,lista_items,lista_trampas):
+    def __init__(self,pantalla:pygame.Surface,personaje_principal,lista_plataformas,imagen_fondo,lista_enemigos,lista_items,lista_trampas):
         ##### ATRIBUTOS #######
         self._slave = pantalla
         self.jugador = personaje_principal
@@ -11,6 +11,18 @@ class Nivel:
         self.items = lista_items
         self.trampas = lista_trampas
         #####################
+        w = self._slave.get_width()
+        h = self._slave.get_width()
+
+        game_over = pygame.image.load("game_over/game_over.png")
+        game_over = pygame.transform.scale(game_over,(w,h))
+        win = pygame.image.load("next_lvl/win.png")
+        win = pygame.transform.scale(win,(w,h))
+        self.win = win
+
+        self.game_over = game_over
+
+        #####################
 
     def update(self,lista_eventos):
         for event in lista_eventos:
@@ -19,8 +31,13 @@ class Nivel:
                     cambiar_modo() 
             elif event.type == pygame.QUIT: 
                 sys.exit()
-        self.actualizar_pantalla()
-        self.dibujear_rectangulos()
+        if self.jugador.vida > 0 and self.jugador.entro == False:
+            self.actualizar_pantalla()
+            self.dibujear_rectangulos()
+        elif self.jugador.entro:
+            self._slave.blit(self.win,(0,0))
+        else:
+            self._slave.blit(self.game_over,(0,0))
 
 
 

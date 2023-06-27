@@ -62,7 +62,7 @@ LARGO_ENEMIGO = 100
 ANCHO_ENEMIGO = 100
 
 punto_de_inicio_enemigo = (900,680)
-punto_de_inicio_enemigo_lvl_2 = (1380,830)
+punto_de_inicio_enemigo_lvl_2 = (1580,830)
 
             ######FANTASMA######
 

@@ -31,7 +31,9 @@ class Nivel_dos(Nivel):
         
         #ITEMS
         manzana = Item("item/Apple.png",(50,50),(441, 523),"vida")
-        trampolin = Item("item/trampolin.png",(70,70),(890,860),"impulso")
+        trampolin = Item("item/trampolin.png",(70,70),(890,860),"impulso",-30)
+        trampolin_3 = Item("item/trampolin.png",(70,70),(546, 496),"impulso",-25)
+        trampolin_2 = Item("item/trampolin.png",(70,70),(1380,845),"impulso",-25)
         llave = Item("item/llave.png",(20,20),(1833, 689),"llave")        
         puerta = Item("puerta/puerta.png",(60,120),(319,180),"puerta")
         
@@ -51,7 +53,7 @@ class Nivel_dos(Nivel):
 
 
         lista_enemigos = [fantasma,enemigo,enemigo_2]
-        lista_items = [manzana,trampolin,llave,puerta]
+        lista_items = [manzana,trampolin,llave,puerta,trampolin_2,trampolin_3]
         lista_trampas = [cierra]
         
         super().__init__(pantalla, personaje, lista_plataformas, fondo, lista_enemigos, lista_items, lista_trampas)

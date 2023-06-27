@@ -19,7 +19,6 @@ class Form_contenedor_lvls(Form):
 
         
       
-
         
     def btn_home_click(self,texto):
         print(texto)
