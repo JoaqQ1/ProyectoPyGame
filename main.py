@@ -1,4 +1,5 @@
-import pygame,sys
+import pygame
+import sys
 
 from Constantes.Constantes_juego import *
 from clases import *
@@ -6,7 +7,7 @@ from APIFORMS.GUI_form_menu_inicio import *
 
 
 #Creacion de ventana
-PANTALLA = pygame.display.set_mode((LARGO,ANCHO))
+PANTALLA = pygame.display.set_mode((LARGO,ANCHO))   
 
 #Inicio juego
 pygame.init()
@@ -19,7 +20,6 @@ while(True):
     clock.tick(FPS) 
     eventos = pygame.event.get()
     for evento in eventos:
-        # print(ev  ento)
         if evento.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
@@ -29,7 +29,6 @@ while(True):
     form_principal.update(eventos)
                 
     pygame.display.flip()
-
 
    
    

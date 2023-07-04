@@ -1,16 +1,11 @@
 import pygame
+import sqlite3 
 from pygame.locals import *
 
-from APIFORMS.GUI_button import *
-from APIFORMS.GUI_button_image import *
-from APIFORMS.GUI_slider import *
-from APIFORMS.GUI_label import *
-from APIFORMS.GUI_textbox import *
-from APIFORMS.GUI_widget import *
 from APIFORMS.GUI_form import *
-from APIFORMS.GUI_form_menu_scrore import *
-from APIFORMS.GUI_form_play import *
-from APIFORMS.GUI_form_prueba import *
+from APIFORMS.GUI_form_ingresar_nombre import *
+
+
 
 
 
@@ -19,15 +14,15 @@ class Form_menu_inicio(Form):
         super().__init__(screen, x, y, w, h, color_background, color_border, border_size, active,path_fondo)
         self.volumen = 0.2
         self.flag_play = True
+        self.create_table()
         pygame.mixer.init()
 
         ###### CONTROLES #######################
-
-        self.form_play = Form_play(self._master,
-                             650, 251,500,700,(220,0,220),"Green",True,"APIFORMS/Window.png",100,10)
+        self.form_nombre = Form_ingrese_nombre(self._master,
+                             650, 251,700,500,(220,0,220),"Green",True,"APIFORMS/Window.png",100,10)
             
         ###### AGREGO CONTROLES A LA LISTA ######
-        self.lista_widgets.append(self.form_play)
+        self.lista_widgets.append(self.form_nombre)
         ##########################################
 
         pygame.mixer.music.load("sonidos/music.ogg")
@@ -46,37 +41,26 @@ class Form_menu_inicio(Form):
         else:
             self.hijo.update(lista_eventos)
     
-    def render(self):
-        self._slave.fill(self._color_background)
+   
 
-    def btn_play_click(self,texto):
-       
-        if self.flag_play:
-            pygame.mixer.music.pause()
-            self.btn_play._color_background = "Cyan"
-            self.btn_play._font_color = "Red"
-            self.btn_play.set_text("Play")
-        else:   
-            pygame.mixer.music.unpause()
-            self.btn_play._color_background = "Red"
-            self.btn_play._font_color = "White"
-            self.btn_play.set_text("Pause")
-        self.flag_play = not self.flag_play
-
-
-    def update_volume(self,lista_eventos):
-        self.volumen = self.slider_volumen.value
-        # self.label_volumen.update(lista_eventos)
-        self.label_volumen.set_text(f"{round(self.volumen * 100)}%")
-        pygame.mixer.music.set_volume(self.volumen)
     
-    def btn_lvl_click(self,texto):
-        # print(texto)   
-        form_lvl = Form_play(self._master,
-                             500,25,1000,1050,(220,0,220),"Green",True,"APIFORMS/Window.png",100,10)
-        self.show_dialog(form_lvl)
 
 
-    def btn_setting_click(self,texto):
-        form_setting = Form_prueba(self._master,500,250,900,350,"Blue","Gold",5,True,"Fondos/fondo_settin.png")
-        self.show_dialog(form_setting)
+    def create_table(self):
+        with sqlite3.connect("base_datos_jugador.db") as conexion:
+            try:
+                sentenencia = '''
+                create table Jugador
+                (
+                    id integer primary key autoincrement,
+                    nombre text, 
+                    puntaje integer,
+                    nivel integer 
+                )
+                '''
+                conexion.execute(sentenencia)
+                print("Tabla creada")
+            except Exception as e:
+                print(f"Error: {e}")
+                
+        

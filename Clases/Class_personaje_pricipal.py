@@ -1,4 +1,4 @@
-import pygame
+import pygame,sqlite3
 
 from Clases.Class_personaje import Personaje
 from Clases.Class_proyectil import Proyectil
@@ -15,7 +15,10 @@ class Personaje_principal(Personaje):
         self.llave = False
         self.score = 0
         self.vida = 3
-        self.entro = False        
+        self.entro = False   
+        self.arma_especial = False
+        self.nivel_completo = 0  
+        self.id = self.leer_id()
 
 
     def update(self,pantalla:pygame.Surface,plataformas,que_hace,ancho_pantalla,lista_enemigo,lista_trampas):
@@ -46,7 +49,8 @@ class Personaje_principal(Personaje):
                 
             case "saltando":                
                 if not self.saltando:
-                    self.sonido_saltando.play()
+                    if self.estado_sonido == 1 or self.estado_sonido == None:
+                        self.sonido_saltando.play()
                     self.que_hace = que_hace 
                     self.saltando = True
                     self.desplazamiento_y = self.capacidad_salto
@@ -57,7 +61,8 @@ class Personaje_principal(Personaje):
                     self.animar_personaje(pantalla)
             case "atacando":                
                 self.que_hace = "atacando"
-                self.sonido_disparo.play()    
+                if self.estado_sonido == 1 or self.estado_sonido == None:
+                    self.sonido_disparo.play()    
                 proyectil = Proyectil("Proyectil/estrella_ninja.png",(30,30),self.lados["main"].centerx,self.lados["main"].centery)       
                 self.lista_proyectiles.append(proyectil)           
                 if not self.saltando:
@@ -77,7 +82,7 @@ class Personaje_principal(Personaje):
         self.shoot(pantalla,30)
            
         if self.detectar_colision_enemigos(lista_enemigo) or self.colisiono_con_trampa(lista_trampas) or self.cayo_al_precipidio(pantalla):
-            self.golpeado = True
+            self.golpeado = True #----> NO ESTA COLICIONANDO CON EL NUEVO ENEMIGO,VERIFICAR BUG
         for enemigo in lista_enemigo:
             if self.detectar_colision_con_proyectil(enemigo.lista_proyectiles):
                 self.golpeado = True
@@ -95,7 +100,6 @@ class Personaje_principal(Personaje):
                     if enemigo.muerto == False:
                         if self.lados["right"].colliderect(enemigo.lados["main"]) or self.lados["left"].colliderect(enemigo.lados["main"]):
                             return  True
-                        
                         else:
                             return False
             else:
@@ -104,7 +108,7 @@ class Personaje_principal(Personaje):
         if validar_lista(lista_trampas):
             if len(lista_trampas) > 0:
                 for trampas in lista_trampas:
-                    if self.lados["right"].colliderect(trampas.lados["main"]) or self.lados["left"].colliderect(trampas.lados["main"]):
+                    if self.lados["main"].colliderect(trampas.lados["main"]):
                         return  True
                     
                     else:
@@ -137,6 +141,18 @@ class Personaje_principal(Personaje):
             return True
         else:
             return False
+    def leer_id(self):
+        with sqlite3.connect("base_datos_jugador.db") as conexion:
+            try:
+                cursor = conexion.cursor()
+                sentencia = "select max(id) from Jugador"
+                cursor.execute(sentencia)
+                resultado = cursor.fetchone()
+                id_maximo = resultado[0] if resultado[0] is not None else 0                
+                print("ID encontrado exitosamente:", id_maximo)
+                return id_maximo
+            except:
+                print("error en obetener el id")
 
     
         

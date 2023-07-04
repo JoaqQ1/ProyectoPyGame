@@ -5,37 +5,39 @@ from funciones import *
 
 
 class Personaje(Objeto_Juego):
-    def __init__(self, path_img, tamaño_rect, pos_inicial,animaciones,velocidad):
-        super().__init__(path_img, tamaño_rect, pos_inicial)        
-        # animacion
+    def __init__(self, path_img, tamaño_rect, pos_inicial, animaciones, velocidad):
+        super().__init__(path_img, tamaño_rect, pos_inicial)
+        
+        # Animaciones
         self.ancho = tamaño_rect[0]
         self.alto = tamaño_rect[1]
         self.animaciones = animaciones
         self.frame_actual = 0
-        self.rescalar_animaciones() 
+        self.rescalar_animaciones()
         self.que_hace = "quieto"
         self.direccion = "derecha"
 
-        #Movimiento
+        # Movimiento
         self.velocidad = velocidad
         self.desplazamiento_y = 0
-        #Gravedad
+
+        # Gravedad
         self.gravedad = 1
         self.limite_velocidad_caida = 15
         self.capacidad_salto = -15
         self.saltando = False
 
+        # Proyectiles
         self.lanzar_proyectil = False
         self.lista_proyectiles = []
 
     def rescalar_animaciones(self):
         for clave in self.animaciones["izquierda"]:
-            escalar_png(self.animaciones["izquierda"][clave],(self.ancho,self.alto))
+            escalar_png(self.animaciones["izquierda"][clave], (self.ancho, self.alto))
         for clave in self.animaciones["derecha"]:
-            escalar_png(self.animaciones["derecha"][clave],(self.ancho,self.alto))
+            escalar_png(self.animaciones["derecha"][clave], (self.ancho, self.alto))
 
-
-    def mover_personaje(self,velocidad,ancho_pantalla):
+    def mover_personaje(self, velocidad, ancho_pantalla):
         for lados in self.lados:
             if (self.lados[lados].x < 0 and velocidad < 0) or (self.lados[lados].x == ancho_pantalla - 100 and velocidad > 0):
                 velocidad = 0
@@ -53,24 +55,25 @@ class Personaje(Objeto_Juego):
         pantalla.blit(self.animaciones[self.direccion][self.que_hace][self.frame_actual],self.lados["main"])
         self.frame_actual += 1
     
-    def aplicar_gravedad(self,pantalla:pygame.Surface,plataformas):
-       
+    def aplicar_gravedad(self, pantalla: pygame.Surface, plataformas):
         if self.saltando:
             self.animar_personaje(pantalla)
 
-            for lado in self.lados:                
-                    self.lados[lado].y += self.desplazamiento_y
+            for lado in self.lados:
+                self.lados[lado].y += self.desplazamiento_y
 
             if self.desplazamiento_y + self.gravedad <= self.limite_velocidad_caida:
-                    self.desplazamiento_y += self.gravedad
+                self.desplazamiento_y += self.gravedad
+
         for lado in plataformas:
-            if self.lados["bottom"].colliderect(lado["top"]):               
+            if self.lados["bottom"].colliderect(lado["top"]):
                 self.desplazamiento_y = 0
                 self.saltando = False
-                self.lados["main"].bottom = lado["top"].top
+                self.lados["main"].bottom = lado["top"].top + 1
                 break
             else:
                 self.saltando = True
+
             
                        
 

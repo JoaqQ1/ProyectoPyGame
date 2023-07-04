@@ -1,4 +1,4 @@
-import pygame
+import pygame,sqlite3
 from pygame.locals import *
 from APIFORMS.GUI_button_image import *
 from APIFORMS.GUI_form import *
@@ -6,8 +6,8 @@ from APIFORMS.GUI_label import *
 
 class FormMenuScore(Form):
     def __init__(self, screen, x, y, w, h, color_background, color_border
-                 ,active,path_imagen,score,margen_y,margen_x,espacio):
-        super().__init__(screen, x, y, w, h, color_background, color_border, active)
+                 ,active,path_imagen,score,margen_y,margen_x,espacio,fondo):
+        super().__init__(screen, x, y, w, h, color_background, color_border, active,path_fondo=fondo)
         
         aux_imagen = pygame.image.load(path_imagen)
         aux_imagen = pygame.transform.scale(aux_imagen,(w,h))
@@ -67,6 +67,9 @@ class FormMenuScore(Form):
             for widget in self.lista_widgets:
                 widget.update(lista_eventos)
             self.draw()
+
+  
+    
 
 
 

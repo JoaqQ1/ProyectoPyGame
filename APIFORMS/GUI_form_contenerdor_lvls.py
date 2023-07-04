@@ -24,7 +24,7 @@ class Form_contenedor_lvls(Form):
         print(texto)
         self.end_dialog()
     
-    def update(self, lista_eventos):
+    def update(self, lista_eventos):        
         self.nivel.update(lista_eventos)
         for widged in self.lista_widgets:
             widged.update(lista_eventos)

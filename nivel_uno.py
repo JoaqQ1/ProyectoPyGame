@@ -1,4 +1,4 @@
-import pygame
+import pygame,sqlite3
 from Constantes.Constantes import *
 from Constantes.Constantes_juego import *
 from Constantes.Constantes_plataformas import *
@@ -7,7 +7,7 @@ from clases import *
 from nivel import Nivel
 
 class Nivel_uno(Nivel):
-    def __init__(self, pantalla):
+    def __init__(self, pantalla):   
 
         W = pantalla.get_width()
         H = pantalla.get_height()
@@ -31,7 +31,7 @@ class Nivel_uno(Nivel):
         manzana = Item("item/Apple.png",(50,50),(1240,350),"vida")
         trampolin = Item("item/trampolin.png",(70,70),(1055,739),"impulso",-30)
         llave = Item("item/llave.png",(20,20),(1500,350),"llave")        
-        puerta = Item("puerta/puerta.png",(60,120),(460,290),"puerta")
+        puerta = Item("puerta/puerta.png",(60,120),(460,290),"puerta",nivel=2)
         moneda = Item("monedas/monedaNo1_00.png",(30,30),(1340,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
         moneda_2 = Item("monedas/monedaNo1_00.png",(30,30),(1380,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)
         moneda_3 = Item("monedas/monedaNo1_00.png",(30,30),(1420,300),"moneda",lista_animaciones=moneda_moviendose_lvl_1)

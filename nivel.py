@@ -1,4 +1,4 @@
-import pygame,sys
+import pygame,sys,sqlite3
 from modo import *
 class Nivel:
     def __init__(self,pantalla:pygame.Surface,personaje_principal,lista_plataformas,imagen_fondo,lista_enemigos,lista_items,lista_trampas):
@@ -18,18 +18,20 @@ class Nivel:
         game_over = pygame.transform.scale(game_over,(w,h))
         win = pygame.image.load("next_lvl/win.png")
         win = pygame.transform.scale(win,(w,h))
+        
         self.win = win
         self.game_over = game_over
-
+        self.calcular = True
         #####################
         self.fuente = pygame.font.SysFont("Arial",35)
         self.total_game_time = 60
-        self.tiempo_de_juego = 0
         self.tiempo_en_pantalla = 0
-
+        self.mensaje_bonificacion = "No hubo bonificacion"
+        self.segundo_anterior = 0
+        self.puntaje_sumado = True
         #####################
 
-    def update(self,lista_eventos):
+    def update(self,lista_eventos):  
         tiempo = pygame.time.get_ticks()
         
         for event in lista_eventos:
@@ -38,24 +40,41 @@ class Nivel:
                     cambiar_modo() 
             elif event.type == pygame.QUIT: 
                 sys.exit()
+        
+        
         if self.jugador.vida > 0 and self.jugador.entro == False:
-            #Tiempo en pantalla en segundos
-            self.tiempo_de_juego = self.total_game_time - int(tiempo / 1000)
-            self.tiempo_en_pantalla = self.fuente.render(f"{self.tiempo_de_juego}",False,"Red")
-            self.actualizar_pantalla()
-            self.dibujear_rectangulos()
-        elif self.jugador.entro:
-            self._slave.blit(self.win,(0,0))
-
-            texto = self.fuente.render(f"""Felizidades completo el nivel.
-                SCORE: {self.jugador.score}
-                VIDA: {self.jugador.vida}
-                TIEMPO:{self.tiempo_de_juego}""",False,"Red")
             
-            self._slave.blit(texto,(266, 498))
+            segundo = int(tiempo / 1000)
+            if segundo != self.segundo_anterior and self.total_game_time > 0:
+                self.total_game_time -= 1
+            self.segundo_anterior = segundo
+            
+            #Tiempo en pantalla en segundos
+            self.tiempo_en_pantalla = self.fuente.render(f"TIME:{self.total_game_time}\nVIDA:{self.jugador.vida}",False,"Red")
+            self.actualizar_pantalla()            
+            self.dibujear_rectangulos()
+        
+        elif self.jugador.entro:
+            
+            self.calcular_puntaje_tiempo()
+            self._slave.blit(self.win,(0,0))
+            texto = self.fuente.render(f"""
+Felicidades completo el nivel.
+SCORE: {self.jugador.score}-{self.mensaje_bonificacion}
+VIDA: {self.jugador.vida}
+TIEMPO:{self.total_game_time}                
+""",False,"Blue")            
+            self._slave.blit(texto,(0, 800))
+            
+            if self.puntaje_sumado:
+                jugador = self.retornar_datos_personaje()
+                self.update_datos(jugador)
+                self.puntaje_sumado = False
+
         else:
             self._slave.blit(self.game_over,(0,0))
         self._slave.blit(self.tiempo_en_pantalla,(0, 0))
+
 
 
 
@@ -72,6 +91,12 @@ class Nivel:
         else:
             accion = "quieto"
         return accion
+    
+    def retornar_medidas_superficie(self):
+        largo = self._slave.get_width()
+        alto = self._slave.get_height()
+        medidas = (largo,alto)
+        return  medidas
     
     def dibujear_rectangulos(self):
         if get_debug(): 
@@ -91,7 +116,6 @@ class Nivel:
                     pygame.draw.rect(self._slave,"Blue",self.plataformas[i][lado],1)
     def actualizar_pantalla(self):
         ancho_pantalla = self.retornar_medidas_superficie()
-        # lista_teclas = pygame.key.get_pressed()
         if self.jugador.golpeado == False:
             que_hace = self.leer_inputs()
         else:
@@ -114,8 +138,61 @@ class Nivel:
                     self.enemigos.remove(enemigo)
        
 
-    def retornar_medidas_superficie(self):
-        largo = self._slave.get_width()
-        alto = self._slave.get_height()
-        medidas = (largo,alto)
-        return  medidas
+
+    def calcular_puntaje_tiempo(self):    
+        if self.calcular:   
+            if self.total_game_time > 40 and self.total_game_time <= 50:
+                self.jugador.score += 500                
+                self.mensaje_bonificacion = "Se bonificaron 300 puntos"
+            elif self.total_game_time > 30 and self.total_game_time <= 40:
+                self.jugador.score += 300                
+                self.mensaje_bonificacion = "Se bonificaron 300 puntos"
+
+            elif self.total_game_time > 20 and self.total_game_time <= 30:
+                self.jugador.score += 200
+                self.mensaje_bonificacion = "Se bonificaron 300 puntos"
+
+            elif self.total_game_time > 10 and self.total_game_time <= 20:
+                self.jugador.score += 100
+                self.mensaje_bonificacion = "Se bonificaron 300 puntos"
+
+            elif self.total_game_time == 0:
+                self.jugador.score -= 200
+                self.mensaje_bonificacion = "Se penalizaron 200 puntos, por terminar fuera de tiempo" 
+
+            self.calcular = False
+           
+        
+    def retornar_datos_personaje(self):
+        with sqlite3.connect("base_datos_jugador.db") as conexion:
+            try:
+                cursor = conexion.cursor()
+                sentencia = "SELECT * FROM Jugador WHERE id = ?"
+                cursor.execute(sentencia, (self.jugador.id,))
+                jugador = cursor.fetchone()
+                
+                return jugador
+            except Exception as e:
+                print(f"Error al retornar los datos: {e}")
+
+    def update_datos(self,jugador):
+        with sqlite3.connect("base_datos_jugador.db") as conexion:
+            try:
+                cursor = conexion.cursor()
+                
+                score = jugador[2]  # Índice 1 para el puntaje en la tabla
+                nivel = jugador[3]  # Índice 2 para el nivel en la tabla
+                
+                if nivel < self.jugador.nivel_completo: # Solo si se esta jugando el nivel por primera vez se van sumar el puntaje 
+                    score += self.jugador.score
+                    nivel = self.jugador.nivel_completo
+
+                sentencia = "UPDATE Jugador SET puntaje = ?, nivel = ? WHERE id = ?"
+                cursor.execute(sentencia, (score,nivel, self.jugador.id))
+                
+                conexion.commit()  # Guardar los cambios en la base de datos
+                print("Se sumo con exito el puntaje")
+            except Exception as e:
+               print(f"Error al sumar los datos: {e}")
+
+  

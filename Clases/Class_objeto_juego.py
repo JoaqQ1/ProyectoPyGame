@@ -1,4 +1,4 @@
-import pygame
+import pygame,sqlite3
 from config import obtener_rectangulos
 
 class Objeto_Juego:
@@ -9,6 +9,8 @@ class Objeto_Juego:
         self.rect.center = pos_inicial
         self.lados = obtener_rectangulos(self.rect)
         self.posicion_inicial = self.retornar_pos_inicial()
+        estado_sonido = self.obtener_estado()
+        self.estado_sonido = estado_sonido
 
     def retornar_pos_inicial(self):
         posiciones = {}
@@ -31,6 +33,23 @@ class Objeto_Juego:
     
     def draw(self,pantalla):
         pantalla.blit(self.superficie,self.lados["main"])
+
+    def obtener_estado(self):
+        with sqlite3.connect("sonido.db") as conexion:
+            try:
+                cursor = conexion.cursor()
+                sentencia = "SELECT estado FROM Sonido"
+                cursor.execute(sentencia)
+                resultado = cursor.fetchone()
+                if resultado is not None:
+                    estado = resultado[0]
+                    return estado
+                else:
+                    print("No se encontró ningún estado en la base de datos.")
+                    return None
+
+            except Exception as e:
+                print(f"Error: {e}")
 
 
 

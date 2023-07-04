@@ -5,3 +5,5 @@ from Clases.Class_item import Item
 from Clases.Class_trampa import Trampa
 from Clases.Class_proyectil import Proyectil
 from Clases.Class_Enemigo_fantasma import Enemigo_fantasma
+from Clases.Class_boss import Boss
+from Clases.Class_Enemigo_trampa import Enemigo_trampa

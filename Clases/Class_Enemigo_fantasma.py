@@ -9,7 +9,7 @@ class Enemigo_fantasma(Personaje):
         self.colisiono = False
         self.rango_mov = rango_mov
         self.sonido_muere = pygame.mixer.Sound("sonidos/sonido_fantasma.mp3")
-    #(self.plataformas,self._slave,self.jugador)
+  
     def update(self,plataformas,pantalla:pygame.Surface,personaje):
         
         self.que_hace = "moviendose"
@@ -29,7 +29,8 @@ class Enemigo_fantasma(Personaje):
             self.animar_personaje(pantalla)
             self.aplicar_gravedad(pantalla,plataformas)
         elif self.colisiono:
-            self.sonido_muere.play()
+            if self.estado_sonido:
+                self.sonido_muere.play()
             self.que_hace = "muriendo"
             self.animar_personaje(pantalla)
             ultima_animacion = len(self.animaciones[self.direccion][self.que_hace])

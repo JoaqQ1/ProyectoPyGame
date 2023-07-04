@@ -38,7 +38,8 @@ class Enemigo(Personaje):
             self.animar_personaje(pantalla)
             self.aplicar_gravedad(pantalla, plataformas)
         else:
-            self.sonido_muere.play()
+            if self.estado_sonido:
+                self.sonido_muere.play()
             self.que_hace = "muriendo"
             self.animar_personaje(pantalla)
             ultima_animacion = len(self.animaciones[self.direccion][self.que_hace])

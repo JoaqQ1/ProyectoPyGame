@@ -9,6 +9,7 @@ from nivel import Nivel
 class Nivel_dos(Nivel):
     def __init__(self, pantalla):
 
+
         W = pantalla.get_width()
         H = pantalla.get_height()
         screen = (W,H)
@@ -34,17 +35,18 @@ class Nivel_dos(Nivel):
         moneda_7 = Item("monedas/monedaNo1_00.png",(30,30),(1037,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
         moneda_8 = Item("monedas/monedaNo1_00.png",(30,30),(1097,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
         moneda_9 = Item("monedas/monedaNo1_00.png",(30,30),(1157,565),"moneda",lista_animaciones=moneda_moviendose_lvl_2)
-        calavera = Item("item_peligrosos/36.png",(30,30),(800,700),"peligroso",lista_animaciones=calavera_moviendose)
+        calavera = Item("item_peligrosos/36.png",(30,30),(750,700),"peligroso",lista_animaciones=calavera_moviendose)
         
         #TRAMPAS
         cierra = Trampa("trampa/cierra.png",(40,40),(140,533),(130,500))
         #ITEMS
+        
         manzana = Item("item/Apple.png",(50,50),(441, 523),"vida")
         trampolin = Item("item/trampolin.png",(70,70),(890,860),"impulso",-30)
         trampolin_3 = Item("item/trampolin.png",(70,70),(546, 496),"impulso",-25)
         trampolin_2 = Item("item/trampolin.png",(70,70),(1380,845),"impulso",-25)
         llave = Item("item/llave.png",(20,20),(1833, 689),"llave")        
-        puerta = Item("puerta/puerta.png",(60,120),(319,180),"puerta")
+        puerta = Item("puerta/puerta.png",(60,120),(319,180),"puerta",nivel=3)
         
         #PLATAFORMAS
 
