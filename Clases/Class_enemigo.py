@@ -38,6 +38,7 @@ class Enemigo(Personaje):
             self.animar_personaje(pantalla)
             self.aplicar_gravedad(pantalla, plataformas)
         else:
+            personaje.score += 100
             if self.estado_sonido:
                 self.sonido_muere.play()
             self.que_hace = "muriendo"
